@@ -2,9 +2,10 @@ import { useEffect } from "react"
 import authFlow, { getToken } from "../scripts/auth";
 import "./App.css"
 import { useState } from "react"
-import { useLocation, useSearchParams } from "react-router-dom"
+import { Route, Routes, useLocation, useSearchParams } from "react-router-dom"
 import { getAccessToken, getGoogleUrl } from "../scripts/youtube";
-
+import Navbar from "./components/navbar";
+import HomeLayout from "./Layouts/HomeLayout";
 
 
 function App() {
@@ -44,10 +45,13 @@ function App() {
 
 
   return (
-    <div>
-     <button onClick={authFlow}> <h1>Login with spotify</h1></button>
-     <button onClick={getGoogleUrl}> <h1>Login with Youtube</h1></button>
-    </div>
+
+    <Routes>
+      <Route path="/" element={<Navbar/>} >
+        <Route index element={<HomeLayout/>} />
+      </Route>
+    </Routes>
+
   )
 }
 
