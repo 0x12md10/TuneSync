@@ -1,7 +1,10 @@
 import "./homepage.css"
 import logo from "../tunesync.png"
-
+import Button from "../components/Button"
+import { Link } from "react-router-dom"
 const HomeLayout = () => {
+
+
   return (
     <div className="homepage">
 
@@ -11,7 +14,11 @@ const HomeLayout = () => {
         </div>
         <div className="description-container">
             <p className="description">A playlist migration tool that seamlessly transfers playlists between streaming services.</p>
-            <button className="btn-start">Get Started</button>
+            <Button  className={"btn-start"}>
+              <Link to={"/migrate"}>
+                Get Started
+              </Link>
+            </Button>
         </div>
     </div>
   )

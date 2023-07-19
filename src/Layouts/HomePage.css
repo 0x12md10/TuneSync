@@ -67,18 +67,18 @@
 }
 
 .btn-start {
-    border: none;
-    border: 1px solid #840C96;
-    background-color: #840C96;
-    color: white;
     padding: 1rem 5rem;
-    letter-spacing: 0.1rem;
     font-size: 1.2rem;
-    border-radius: 10px;
     margin-top: 1.2rem;
-    cursor: pointer;
     transition: padding 0.5s;
     box-shadow: 2px 31px 49px -15px rgba(0,0,0,0.75);
+
+
+}
+
+.btn-start a {
+    text-decoration: none;
+    color: white;
 
 }
 

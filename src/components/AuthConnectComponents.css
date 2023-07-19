@@ -1,0 +1,21 @@
+.spotify-auth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.yt-auth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.spotify {
+
+    width: 5em;
+}
+
+.yt {
+    width: 5em;
+}
