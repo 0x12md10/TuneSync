@@ -6,6 +6,7 @@ import { Route, Routes, useLocation, useSearchParams } from "react-router-dom"
 import { getAccessToken, getGoogleUrl } from "../scripts/youtube";
 import Navbar from "./components/navbar";
 import HomeLayout from "./Layouts/HomeLayout";
+import MigrateLayout from "./Layouts/MigrateLayout";
 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Navbar/>} >
         <Route index element={<HomeLayout/>} />
+        <Route path="/migrate" element={<MigrateLayout/>} ></Route>
       </Route>
     </Routes>
 
