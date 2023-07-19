@@ -31,7 +31,7 @@ async function generateCodeChallenge(codeVerifier) {
 
 export const getToken = async()=> {
     const clientId = 'a41ccb31150241f7b6c45e55e38d5beb';
-    const redirectUri = 'http://localhost:5173';
+    const redirectUri = 'http://localhost:5173/spotify-auth-callback';
     const urlParams = new URLSearchParams(window.location.search);
     let code = urlParams.get('code');
     let codeVerifier = localStorage.getItem('code_verifier');
@@ -58,12 +58,12 @@ export const getToken = async()=> {
             }
         const data = await response.json();
         console.log(data)
-        localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('spotify_access_token', data.access_token);
     }
 
 const authFlow = async() => {
     const clientId = 'a41ccb31150241f7b6c45e55e38d5beb';
-    const redirectUri = 'http://localhost:5173';
+    const redirectUri = 'http://localhost:5173/spotify-auth-callback';
 
     let codeVerifier = generateRandomString(128);
 
