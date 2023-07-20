@@ -3,7 +3,7 @@ import SpotifyLogo from "../components/SpotifyLogo"
 import Button from "../components/Button"
 import "./AuthConnectComponents.css"
 
-const AuthConnectComponents = ({authType , text}) => {
+const AuthConnectComponents = ({authState,authType , text , clickHandler}) => {
   return (
     <div className={`${authType}-auth`}>
       <div className={authType}>
@@ -11,7 +11,10 @@ const AuthConnectComponents = ({authType , text}) => {
             authType === "spotify" ? <SpotifyLogo/> : <YoutubeLogo/>
           }
       </div>
-      <Button className={"btn-auth"}>{text}</Button>
+      <Button clickHandler={clickHandler} className={"btn-auth"}>{authState ? "Disconnect" : text}</Button>
+      {
+        authState && <p className="authstate">&bull; Connected</p>
+      }
   </div>
   )
 }

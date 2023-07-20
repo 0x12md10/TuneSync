@@ -2,7 +2,7 @@ import "./button.css"
 
 const Button = ({type , className , clickHandler, children}) => {
   return (
-    <button onClick={()=>clickHandler(type)} className={`btn ${className}`}>{children}</button>
+    <button onClick={()=>clickHandler()} className={`btn ${className}`}>{children}</button>
   )
 }
 

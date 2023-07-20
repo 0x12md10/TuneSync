@@ -14,7 +14,7 @@ const HomeLayout = () => {
         </div>
         <div className="description-container">
             <p className="description">A playlist migration tool that seamlessly transfers playlists between streaming services.</p>
-            <Button  className={"btn-start"}>
+            <Button clickHandler={null}  className={"btn-start"}>
               <Link to={"/migrate"}>
                 Get Started
               </Link>

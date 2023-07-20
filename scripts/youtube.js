@@ -1,7 +1,7 @@
 import axios from "axios";
 const CLIENT_ID = "366826251818-brmjuhbqp4arls50m7rf6p4dph2fpo3r.apps.googleusercontent.com";
 const CLIENT_SECRET = "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";
-const REDIRECT_URL = "http://localhost:5173/yt-auth-callback";
+const REDIRECT_URL = "http://localhost:5173/migrate/yt-auth-callback";
 
 // const oauth2Client = new google.auth.OAuth2(
 //     CLIENT_ID,
@@ -35,6 +35,8 @@ const REDIRECT_URL = "http://localhost:5173/yt-auth-callback";
 
 
 export const getGoogleUrl =  async() => {
+
+    
     const rootUrl = `https://accounts.google.com/o/oauth2/v2/auth`;
   
     const options = {
@@ -61,8 +63,9 @@ export const getGoogleUrl =  async() => {
         client_secret : CLIENT_SECRET,
         grant_type: 'authorization_code',
       });
-      console.log('Access token:', response.data.access_token);
-      localStorage.setItem("yt_access_token" ,response.data.access_token )
+      console.log(response.data);
+      const data = JSON.stringify(response.data);
+      localStorage.setItem('yt_tokens', data);
 
     }
     catch (error) {
