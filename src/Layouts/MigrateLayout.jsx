@@ -56,6 +56,16 @@ const MigrateLayout = () => {
       setYtAuthCode(code);
       ytToken();
     }
+  } 
+
+  if(localStorage.getItem("spotify_tokens")) {
+    setIsSpotifyAuthenticated(true);
+    setSpotifyAccessToken(JSON.parse(localStorage.getItem("spotify_tokens")).access_token);
+  }
+
+  if(localStorage.getItem("spotify_tokens")) {
+    setIsYtAuthenticated(true);
+    setYtAccessToekn(JSON.parse(localStorage.getItem("yt_tokens")).access_token);
   }
 console.log("inside useffect") 
 

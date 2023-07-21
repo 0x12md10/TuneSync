@@ -21,6 +21,7 @@ const UserContextProvider = ({children}) => {
     {/* Youtube Contents */}
     const [ytAccessToken , setYtAccessToekn] = useState("");
     const [isYtAuthenticated , setIsYtAuthenticated] = useState(false);
+    const [youtubeUserData , setYoutubeUserData] = useState();
 
 
      {/* overall state */}
@@ -57,7 +58,9 @@ const UserContextProvider = ({children}) => {
         isYtAuthenticated,
         setIsYtAuthenticated,
         spotifyUserData,
-        setSpotifyUserData
+        setSpotifyUserData,
+        youtubeUserData,
+        setYoutubeUserData
      }
      console.log(userObj)
 

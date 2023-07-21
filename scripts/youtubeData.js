@@ -1,13 +1,8 @@
 import axios from "axios";
 
-const config = {
-        headers : {
-    "Authorization" : "Bearer ya29.a0AbVbY6PXsq1etW0Qc2q1r6o8yvWSK_Jy6McJOc4-E8HHuMKD9q7JtyjnV1VIUtBKILnp6G-LfUlJe4asRy4YVXo-ik53TtqbStxI_s5nLXYTZPcEZOSgr9ZmiAm9-Ict5QzlmaOzYgBXKDeZzTKJNqsWKoPVaCgYKAXYSARISFQFWKvPlIZfxRGovVpf81wOj2b4wxw0163",
-    "Accept" : "application/json"
-}
-    }
 
-const getYoutubeUserDetails =async () => {
+
+export const getYoutubeUserDetails =async (config) => {
     const rootUrl = "https://youtube.googleapis.com/youtube/v3/channels";
 
     const options= {
@@ -36,12 +31,11 @@ const getYoutubeUserDetails =async () => {
         
     }
 
-    console.log(userObj)
     return userObj;
     
 }
 
-const getYoutubePlaylists = async () => {
+ export const getYoutubePlaylists = async (config) => {
     const rootUrl = `https://youtube.googleapis.com/youtube/v3/playlists`;
   
     const options = {
@@ -73,11 +67,11 @@ const getYoutubePlaylists = async () => {
             return playListobj;
         })
     }
-    console.log(obj)
+
     return obj;
 }
 
-const getYoutubePlaylistItems = async (playlistId) => {
+export const getYoutubePlaylistItems = async (config ,playlistId) => {
     const rootUrl = "https://www.googleapis.com/youtube/v3/playlistItems";
 
     const options= {

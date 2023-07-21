@@ -12,13 +12,20 @@
     flex-direction: row;
     align-items: center;
     color: #fff;
-    background-color: #1DB954;
+    
     width: 100%;
     height: 30vh;
     box-sizing: border-box;
     padding-left:  1em;
     border-radius: 10px;
 
+}
+.user-bg-spotify{
+    background-color: #0e8d3b;
+}
+
+.user-bg-youtube {
+    background-color: #730404;
 }
 
 .user-dp-container {
