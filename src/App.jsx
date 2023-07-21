@@ -7,6 +7,7 @@ import MigrateLayout from "./Layouts/MigrateLayout";
 import PlaylistView from "./Layouts/PlaylistView";
 
 
+
 function App() {
 
 
@@ -17,6 +18,8 @@ function App() {
         <Route index element={<HomeLayout/>} />
         <Route path="/migrate/*" element={<MigrateLayout/>} ></Route>
         <Route path="/playlist/:client" element={<PlaylistView/>}/>
+
+
       </Route>
 
     </Routes>

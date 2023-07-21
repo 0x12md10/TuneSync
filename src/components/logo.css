@@ -17,11 +17,52 @@
     fill: #FF0000;
 }
 
-.user-logo {
+.followers-logo {
     max-width: 100%;
     height: 100%;
 }
 
-.user-logo path {
-    fill: #000;
+.followers-logo path {
+    fill: #fff;
 }
+
+.profile-logo {
+    max-width: 100%;
+    height: 100%;
+}
+
+.profile-logo path {
+    fill: #1A1A1A;
+}
+.user-dp {
+    height: 100%;
+    border-radius: 10px;
+}
+
+
+.email-logo {
+    max-width: 100%;
+    height: 100%;
+}
+
+.email-logo path {
+    fill: #fff;
+}
+
+.country-logo {
+    max-width: 100%;
+    height: 100%;
+}
+
+.country-logo path {
+    fill: #fff;
+}
+
+.transfer-logo {
+    max-width: 100%;
+    height: 100%;
+    background-color: #1A1A1A;
+
+    cursor: pointer;
+}
+

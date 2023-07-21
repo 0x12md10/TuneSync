@@ -14,6 +14,7 @@ const UserContextProvider = ({children}) => {
      {/* Spotify Contents */}
     const [spotifyAccessToken , setSpotifyAccessToken] = useState("");
     const [isSpotifyAuthenticated , setIsSpotifyAuthenticated] = useState(false);
+    const [spotifyUserData , setSpotifyUserData] = useState();
 
 
 
@@ -54,7 +55,9 @@ const UserContextProvider = ({children}) => {
         ytAccessToken,
         setYtAccessToekn,
         isYtAuthenticated,
-        setIsYtAuthenticated
+        setIsYtAuthenticated,
+        spotifyUserData,
+        setSpotifyUserData
      }
      console.log(userObj)
 
