@@ -32,6 +32,7 @@ const spotifySlice = createSlice({
                 state.loading = false
                 state.spotifyUserData.isSpotifyAuthenticated = true
                 state.spotifyUserData.spotifyAccessTokens = action.payload
+                
         },
         FETCH_SPOTIFY_TOKENS_FAILURE : (state,action) => {
             if(state.loading === true) {

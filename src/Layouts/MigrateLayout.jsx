@@ -1,7 +1,7 @@
 import AuthConnectComponents from "../components/AuthConnectComponents"
 import "./MigrateLayout.css"
 import { useState, useEffect } from "react";
-import { useLocation, useSearchParams } from "react-router-dom"
+import { useLocation, useSearchParams,useNavigate } from "react-router-dom"
 import { getGoogleUrl  } from "../../scripts/youtube"
 import {authFlow } from "../../scripts/auth";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +12,8 @@ import { getCookie } from "../../scripts/cookieSetup";
 const MigrateLayout = () => {
 
   const {spotifyUserData} = useSelector(state =>state.spotify);
-  const {youtubeUserData} = useSelector(state =>state.youtube)
+  const {youtubeUserData} = useSelector(state =>state.youtube);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch()
 
@@ -26,22 +27,30 @@ const MigrateLayout = () => {
 
 
   useEffect(()=> {
+    if(getCookie("sp_access_token")) {
+      dispatch(SP_INITIAL_CHECK(getCookie("sp_access_token")));
+      navigate("/migrate")
+  
+    }
+  
+    if(getCookie("yt_access_token")) {
+      dispatch(YT_INITIAL_CHECK(getCookie("yt_access_token")))
+      navigate("/migrate")
+    }
     
     const SpotifyToken = async() => {
-      dispatch(fetchSpotifyToken())
-      setSearchParams(searchParams => {
-        searchParams.set("type", "spotify");
-        return searchParams;
-      });
+      if(!getCookie("sp_access_token")){
+        dispatch(fetchSpotifyToken())
+      }
+
   }
 
   const ytToken = async() => {
-    dispatch(fetchyoutubeToken(code));
-    console.log("inside token fetch")
-    setSearchParams(searchParams => {
-      searchParams.set("type", "yt");
-      return searchParams;
-    });
+      if(!getCookie("yt_access_token")){
+        dispatch(fetchyoutubeToken(code));
+      }
+    
+
   }
    
     const code =searchParams.get("code")
@@ -58,13 +67,7 @@ const MigrateLayout = () => {
     }
   } 
 
-  if(getCookie("sp_access_token")) {
-    dispatch(SP_INITIAL_CHECK(getCookie("sp_access_token")))
-  }
 
-  if(getCookie("yt_access_token")) {
-    dispatch(YT_INITIAL_CHECK(getCookie("yt_access_token")))
-  }
 console.log("inside useffect") 
 
 

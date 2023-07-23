@@ -1,9 +1,13 @@
 import "./homepage.css"
 import logo from "../tunesync.png"
 import Button from "../components/Button"
-import { Link } from "react-router-dom"
+import {  useNavigate } from "react-router-dom"
 const HomeLayout = () => {
 
+  const navigate = useNavigate()
+  const route = () => {
+     return navigate("/migrate")
+  }
 
   return (
     <div className="homepage">
@@ -14,10 +18,8 @@ const HomeLayout = () => {
         </div>
         <div className="description-container">
             <p className="description">A playlist migration tool that seamlessly transfers playlists between streaming services.</p>
-            <Button clickHandler={null}  className={"btn-start"}>
-              <Link to={"/migrate"}>
-                Get Started
-              </Link>
+            <Button clickHandler={route}  className={"btn-start"}>
+              Get Started
             </Button>
         </div>
     </div>
