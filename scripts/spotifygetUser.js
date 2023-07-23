@@ -3,8 +3,6 @@ import axios from "axios"
 
 export const spotifyGetUser = async (config) => {
 
-
-
     const response = await axios.get("https://api.spotify.com/v1/me" , config);
     const data = response.data;
     const spotifyUser = {

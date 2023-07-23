@@ -1,3 +1,4 @@
+import {setCookie} from "./cookieSetup"
 import axios from "axios";
 const CLIENT_ID = "366826251818-brmjuhbqp4arls50m7rf6p4dph2fpo3r.apps.googleusercontent.com";
 const CLIENT_SECRET = "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";
@@ -63,8 +64,10 @@ export const getGoogleUrl =  async() => {
         client_secret : CLIENT_SECRET,
         grant_type: 'authorization_code',
       });
-      const data = response.data
-      localStorage.setItem('yt_tokens', JSON.stringify(response.data));
+      const data = response.data;
+      const {access_token ,expires_in ,refresh_token} =  data;
+      setCookie("yt_access_token",access_token , expires_in);
+      setCookie("yt_refresh_token" ,refresh_token,expires_in);
       return data;
  
 }

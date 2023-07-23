@@ -7,7 +7,7 @@ import {authFlow } from "../../scripts/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSpotifyToken,INITIAL_CHECK as SP_INITIAL_CHECK ,REMOVE_SPOTFIY_AUTH} from "../features/spotify/spotifySlice";
 import { fetchyoutubeToken ,INITIAL_CHECK as YT_INITIAL_CHECK ,REMOVE_YOUTUBE_AUTH } from "../features/youtube/youtubeSlice";
-
+import { getCookie } from "../../scripts/cookieSetup";
 
 const MigrateLayout = () => {
 
@@ -58,12 +58,12 @@ const MigrateLayout = () => {
     }
   } 
 
-  if(localStorage.getItem("spotify_tokens")) {
-    dispatch(SP_INITIAL_CHECK(JSON.parse(localStorage.getItem("spotify_tokens"))))
+  if(getCookie("sp_access_token")) {
+    dispatch(SP_INITIAL_CHECK(getCookie("sp_access_token")))
   }
 
-  if(localStorage.getItem("yt_tokens")) {
-    dispatch(YT_INITIAL_CHECK(JSON.parse(localStorage.getItem("yt_tokens"))))
+  if(getCookie("yt_access_token")) {
+    dispatch(YT_INITIAL_CHECK(getCookie("yt_access_token")))
   }
 console.log("inside useffect") 
 

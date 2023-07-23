@@ -1,3 +1,4 @@
+import {setCookie,getCookie} from "./cookieSetup";
 
 // Generate code verifier
 const  generateRandomString = (length) => {
@@ -34,7 +35,7 @@ export const getToken = async()=> {
     const redirectUri = 'http://localhost:5173/migrate/spotify-auth-callback';
     const urlParams = new URLSearchParams(window.location.search);
     let code = urlParams.get('code');
-    let codeVerifier = localStorage.getItem('code_verifier');
+    const codeVerifier = getCookie("sp_code_verifier")
     
     console.log("in the auth flow")
     
@@ -57,7 +58,9 @@ export const getToken = async()=> {
             throw new Error('HTTP status ' + response.status);
             }
         const data = await response.json();
-        localStorage.setItem('spotify_tokens',JSON.stringify(data));
+        const {access_token ,expires_in ,refresh_token} =  data;
+        setCookie("sp_access_token",access_token , expires_in);
+        setCookie("sp_refresh_token" ,refresh_token,expires_in);
         return data;
     }
 
@@ -73,7 +76,9 @@ export const authFlow = async() => {
     let state = generateRandomString(16);
     let scope = 'user-read-private user-read-email playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public';
 
-    localStorage.setItem('code_verifier', codeVerifier);
+    setCookie("sp_code_verifier" , codeVerifier,3600);
+
+
     let args = new URLSearchParams({
         response_type: 'code',
         client_id: clientId,

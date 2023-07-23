@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {   getToken } from "../../../scripts/auth";
 import { spotifyGetUser } from "../../../scripts/spotifygetUser";
 import { spotifyGetPlayLists } from "../../../scripts/spotifygetUser";
-
+import { getCookie , setCookie } from "../../../scripts/cookieSetup";
 
 const initialState = {
     loading : false,
@@ -42,7 +42,8 @@ const spotifySlice = createSlice({
         REMOVE_SPOTFIY_AUTH : (state) => {
             state.spotifyUserData.isSpotifyAuthenticated = false
             state.spotifyUserData.spotifyAccessTokens = {};
-            localStorage.removeItem("spotify_tokens")
+            setCookie("sp_access_token" ,"" , -99)
+            setCookie("sp_refresh_token" , "" , -99)
         },
         TOGGLE_SPOTIFY_USER_DETAILS_REQUESTED : (state,action)=> {
                 state.spotifyUserData.loading = action.payload
@@ -77,7 +78,7 @@ export const fetchSpotifyToken = () => async(dispatch) => {
 
 export const fetchSpotifyUserDetails = () => async(dispatch) => {
         dispatch(TOGGLE_SPOTIFY_USER_DETAILS_REQUESTED(true))
-        const spAt = JSON.parse( localStorage.getItem("spotify_tokens"))["access_token"];
+        const spAt = getCookie("sp_access_token")
         const config = {
             headers : {
                 "Authorization" : `Bearer ${spAt}`

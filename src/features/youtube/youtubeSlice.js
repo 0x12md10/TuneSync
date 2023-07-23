@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {  getAccessToken } from "../../../scripts/youtube";
 import { getYoutubePlaylists,getYoutubeUserDetails } from "../../../scripts/youtubeData";
-
+import { getCookie , setCookie } from "../../../scripts/cookieSetup";
 
 
 const initialState = {
@@ -43,7 +43,8 @@ const youtubeSlice = createSlice({
         REMOVE_YOUTUBE_AUTH : (state) => {
             state.youtubeUserData.isYoutubeAuthenticated = false
             state.youtubeUserData.youtubeAccessTokens = {}
-            localStorage.removeItem("yt_tokens")
+            setCookie("yt_access_token" , "" , -99)
+            setCookie("yt_refresh_token" , "" , -99)
         },
         TOGGLE_YOUTUBE_USER_DETAILS_REQUESTED : (state,action)=> {
             state.youtubeUserData.loading = action.payload
@@ -77,7 +78,7 @@ export const fetchyoutubeToken = (code) => async(dispatch) => {
 
 export const fetchYoutubeUserDetails = () => async(dispatch) => {
     dispatch(TOGGLE_YOUTUBE_USER_DETAILS_REQUESTED(true))
-    const ytAt = JSON.parse( localStorage.getItem("yt_tokens"))["access_token"];
+    const ytAt = getCookie("yt_access_token");
     const config = {
         headers : {
             "Authorization" : `Bearer ${ytAt}`,

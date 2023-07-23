@@ -1,4 +1,3 @@
-import React from 'react'
 import "./playlistitem.css"
 import TransferLogo  from "./TransferLogo"
 import { useParams } from 'react-router-dom'
