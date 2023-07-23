@@ -55,7 +55,7 @@ export const getGoogleUrl =  async() => {
   };
 
   export const getAccessToken = async (code) => {
-    try {
+
       const response = await axios.post('https://oauth2.googleapis.com/token', {
         code,
         client_id: CLIENT_ID,
@@ -63,12 +63,8 @@ export const getGoogleUrl =  async() => {
         client_secret : CLIENT_SECRET,
         grant_type: 'authorization_code',
       });
-      console.log(response.data);
-      const data = JSON.stringify(response.data);
-      localStorage.setItem('yt_tokens', data);
-
-    }
-    catch (error) {
-        console.error('Error fetching access token:', error);
-      }
+      const data = response.data
+      localStorage.setItem('yt_tokens', JSON.stringify(response.data));
+      return data;
+ 
 }

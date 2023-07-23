@@ -1,64 +1,34 @@
 import "./PlaylistView.css"
 import { useParams } from 'react-router-dom';
 import UserLogo from "../components/UserLogo";
-import { useEffect, useState , useContext } from "react";
-import { spotifyGetPlayLists, spotifyGetUser } from "../../scripts/spotifygetUser";
-import { getYoutubeUserDetails , getYoutubePlaylists } from "../../scripts/youtubeData"
-import { UserContext } from "../contexts/UserContext";
+import { useEffect } from "react";
 import PlayListItems from "../components/PlayListItems";
 import EmailLogo from "../components/EmailLogo";
 import CountryLogo from "../components/CountryLogo";
+import { fetchSpotifyUserDetails} from "../features/spotify/spotifySlice";
+import { useSelector,useDispatch } from "react-redux";
+import { fetchYoutubeUserDetails } from "../features/youtube/youtubeSlice";
 
 const PlaylistView = () => {
 
     const {client} = useParams();
-
-
-    const [isLoading ,setIsLoading] = useState(false);
-    const { spotifyAccessToken,
-            ytAccessToken, 
-            spotifyUserData,
-            setSpotifyUserData,
-            youtubeUserData,
-            setYoutubeUserData
-            } = useContext(UserContext);
+    const {spotifyUserData} = useSelector(state =>state.spotify);
+    const {youtubeUserData} = useSelector(state =>state.youtube)
+  
+    const dispatch = useDispatch()
         
 
     const getSpotifyDetails = async () => {
-        setIsLoading(true)
-        const spAt = JSON.parse( localStorage.getItem("spotify_tokens"))["access_token"];
-        const config = {
-            headers : {
-                "Authorization" : `Bearer ${spAt}`
-            }
-        }        
-        const userDetails = await spotifyGetUser(config);
-        const userPlayLists = await spotifyGetPlayLists(config);
-        const data = {userDetails , userPlayLists}
-        setSpotifyUserData(data);
-        setIsLoading(false)
+        dispatch(fetchSpotifyUserDetails())
     }
 
     const getYoutubeDetails = async() => {
-        setIsLoading(true)
-        const ytAt = JSON.parse( localStorage.getItem("yt_tokens"))["access_token"];
-        const config = {
-            headers : {
-                "Authorization" : `Bearer ${ytAt}`,
-                "Accept" : "application/json"
-            }
-        }        
-        const userDetails = await getYoutubeUserDetails(config);
-        const userPlayLists = await getYoutubePlaylists(config);
-        const data = {userDetails , userPlayLists}
-        setYoutubeUserData(data);
-        setIsLoading(false)
-
+        dispatch(fetchYoutubeUserDetails())
     }
 
     useEffect(()=> {
 
-
+        console.log(client)
         if(client === "spotify") {
             getSpotifyDetails();
 
@@ -68,16 +38,16 @@ const PlaylistView = () => {
         }
     }, [client])
 
-    console.log(client)
+ 
 
     const dummyprofile = "https://www.pngitem.com/pimgs/m/146-1468298_profile-icon-white-png-user-icon-ico-transparent.png"
 
     const imageUrl = () => {
-        if(client === "spotify") {
+        if((client === "spotify") &&  spotifyUserData["userDetails"]) {
             const url = spotifyUserData["userDetails"]["images"]
-            return url.length > 0 ? url[1]["url"] : dummyprofile
+            return url? url[1]["url"] : dummyprofile
         } 
-        if(client ==="youtube") {
+        if((client ==="youtube") && youtubeUserData["userDetails"]) {
             const url = youtubeUserData["userDetails"]["channels"][0]["images"]
             return url  ? url["high"]["url"] : dummyprofile
         }
@@ -87,7 +57,7 @@ const PlaylistView = () => {
      <div className='playlistview-container'>
 
         {
-            !isLoading &&( (client==="youtube" && youtubeUserData )|| ( client === "spotify" && spotifyUserData)) ? 
+            ( ((client==="youtube") && youtubeUserData.userDetails &&  !youtubeUserData.loading )|| (!spotifyUserData.loading && (client === "spotify") && spotifyUserData.userDetails) ) ? 
             <div className={`user-details  ${client === "spotify" ? "user-bg-spotify" : "user-bg-youtube"}`}>
                 <div className="user-dp-container">
                 <img src={imageUrl()} alt="dp" className="user-dp" />
@@ -141,7 +111,7 @@ const PlaylistView = () => {
         : "loading"
         }
         {
-             !isLoading &&( (client==="youtube" && youtubeUserData )|| ( client === "spotify" && spotifyUserData)) ? 
+             ( ((client==="youtube") && youtubeUserData.userDetails &&  !youtubeUserData.loading )|| (!spotifyUserData.loading && (client === "spotify") && spotifyUserData.userDetails) ) ? 
             <PlayListItems client={client} /> : "loading"
         }
     </div>

@@ -58,6 +58,7 @@ export const getToken = async()=> {
             }
         const data = await response.json();
         localStorage.setItem('spotify_tokens',JSON.stringify(data));
+        return data;
     }
 
 export const authFlow = async() => {

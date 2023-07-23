@@ -1,22 +1,21 @@
 import AuthConnectComponents from "../components/AuthConnectComponents"
 import "./MigrateLayout.css"
-import { UserContext } from "../contexts/UserContext";
-import { useState, useEffect , useContext } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useSearchParams } from "react-router-dom"
-import { getGoogleUrl , getAccessToken } from "../../scripts/youtube"
-import {authFlow , getToken} from "../../scripts/auth";
+import { getGoogleUrl  } from "../../scripts/youtube"
+import {authFlow } from "../../scripts/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSpotifyToken,INITIAL_CHECK as SP_INITIAL_CHECK ,REMOVE_SPOTFIY_AUTH} from "../features/spotify/spotifySlice";
+import { fetchyoutubeToken ,INITIAL_CHECK as YT_INITIAL_CHECK ,REMOVE_YOUTUBE_AUTH } from "../features/youtube/youtubeSlice";
 
 
 const MigrateLayout = () => {
 
-  const { spotifyAccessToken,
-    setSpotifyAccessToken,
-    isSpotifyAuthenticated,
-    setIsSpotifyAuthenticated,
-    ytAccessToken,
-    setYtAccessToekn,
-    isYtAuthenticated,
-    setIsYtAuthenticated}  = useContext(UserContext)
+  const {spotifyUserData} = useSelector(state =>state.spotify);
+  const {youtubeUserData} = useSelector(state =>state.youtube)
+
+  const dispatch = useDispatch()
+
   const [searchParams,setSearchParams] = useSearchParams();
   const [spotifyAuthCode , setSpotifyAuthCode] = useState("");
   const [ytAuthCode , setYtAuthCode] = useState("");
@@ -29,7 +28,7 @@ const MigrateLayout = () => {
   useEffect(()=> {
     
     const SpotifyToken = async() => {
-      await getToken();
+      dispatch(fetchSpotifyToken())
       setSearchParams(searchParams => {
         searchParams.set("type", "spotify");
         return searchParams;
@@ -37,7 +36,8 @@ const MigrateLayout = () => {
   }
 
   const ytToken = async() => {
-    await getAccessToken(code);
+    dispatch(fetchyoutubeToken(code));
+    console.log("inside token fetch")
     setSearchParams(searchParams => {
       searchParams.set("type", "yt");
       return searchParams;
@@ -59,13 +59,11 @@ const MigrateLayout = () => {
   } 
 
   if(localStorage.getItem("spotify_tokens")) {
-    setIsSpotifyAuthenticated(true);
-    setSpotifyAccessToken(JSON.parse(localStorage.getItem("spotify_tokens")).access_token);
+    dispatch(SP_INITIAL_CHECK(JSON.parse(localStorage.getItem("spotify_tokens"))))
   }
 
-  if(localStorage.getItem("spotify_tokens")) {
-    setIsYtAuthenticated(true);
-    setYtAccessToekn(JSON.parse(localStorage.getItem("yt_tokens")).access_token);
+  if(localStorage.getItem("yt_tokens")) {
+    dispatch(YT_INITIAL_CHECK(JSON.parse(localStorage.getItem("yt_tokens"))))
   }
 console.log("inside useffect") 
 
@@ -74,20 +72,16 @@ console.log("inside useffect")
 
   const clickHandler = (type) => {
     if(type === "spotify") {
-      if(isSpotifyAuthenticated) {
-        setIsSpotifyAuthenticated(false);
-        setSpotifyAccessToken("");
-        localStorage.removeItem("spotify_tokens");
+      if(spotifyUserData.isSpotifyAuthenticated) {
+        dispatch(REMOVE_SPOTFIY_AUTH())
       } else {
         authFlow()
       }
 
     }
     if(type === "yt") {
-      if(isYtAuthenticated) {
-        setIsYtAuthenticated(false);
-        setYtAccessToekn("");
-        localStorage.removeItem("yt_tokens");
+      if(youtubeUserData.isYoutubeAuthenticated) {
+        dispatch(REMOVE_YOUTUBE_AUTH())
       } else {
         getGoogleUrl()
       }
@@ -99,8 +93,8 @@ console.log("inside useffect")
     <div className="migrate-container">
         <h2 className="migrate-title">Sign In with Spotify and Youtube to start managing and migrating your musics.</h2>
         <div className="auth">
-            <AuthConnectComponents authState={isSpotifyAuthenticated} clickHandler={()=>clickHandler("spotify")} authType={"spotify"} text={"Connect with Spotify"}/>
-            <AuthConnectComponents authState = {isYtAuthenticated} clickHandler={()=>clickHandler("yt")} authType={"yt"} text={"Connect with Youtube"}/>
+            <AuthConnectComponents authState={spotifyUserData.isSpotifyAuthenticated} clickHandler={()=>clickHandler("spotify")} authType={"spotify"} text={"Connect with Spotify"}/>
+            <AuthConnectComponents authState = {youtubeUserData.isYoutubeAuthenticated} clickHandler={()=>clickHandler("yt")} authType={"yt"} text={"Connect with Youtube"}/>
 
         </div>
     </div>

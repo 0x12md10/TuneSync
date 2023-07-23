@@ -3,17 +3,18 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 
 import './index.css'
-import UserContextProvider from './contexts/UserContext.jsx'
+import store from "./store/store.js"
+import { Provider } from 'react-redux'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
 
 
-      
-      <UserContextProvider>
+      <BrowserRouter>
+        <Provider store={store}>
         <App />
-        </UserContextProvider>
-
+        </Provider>
+        </BrowserRouter>
 
 
   </React.StrictMode>,
