@@ -1,29 +1,28 @@
-import { UserContext } from "../contexts/UserContext"
-import { useContext } from "react";
+
 import PlayListItem from "./PlayListItem";
 import "./playlistitems.css"
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+
 
 const PlayListItems = () => {
-    const {spotifyAccessToken,
-        ytAccessToken, 
-        spotifyUserData,
-        setSpotifyUserData,
-        youtubeUserData,
-        setYoutubeUserData
-    } = useContext(UserContext);
+
 
     const {client} = useParams()
+    const {spotifyUserData} = useSelector(state =>state.spotify);
+    const {youtubeUserData} = useSelector(state =>state.youtube)
+  
 
   return (
     <div className="playListItems-container">
         {
-           client === "spotify" && spotifyUserData["userPlayLists"].map(item => {
+           client === "spotify" && spotifyUserData["userPlaylists"].map(item => {
                 return <PlayListItem key={item.id} data={item} />
             })
         }
         {
-            client === "youtube" && youtubeUserData["userPlayLists"]["items"].map(
+            client === "youtube" && youtubeUserData["userPlaylists"]["items"].map(
                 (item)=> {
                     return <PlayListItem  key={item.id}  data={item}/>
                 }
