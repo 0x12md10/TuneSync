@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { useLocation, useSearchParams } from "react-router-dom"
+
 
 
 export const UserContext = createContext();
@@ -7,9 +7,8 @@ export const UserContext = createContext();
 
 const UserContextProvider = ({children}) => {
 
-  const [searchParams] = useSearchParams();
-  const path = useLocation();
-  const [cbPath , setCbPath] = useState(path);
+  console.log(window.location)
+
 
      {/* Spotify Contents */}
     const [spotifyAccessToken , setSpotifyAccessToken] = useState("");
@@ -27,10 +26,13 @@ const UserContextProvider = ({children}) => {
      {/* overall state */}
 
      useEffect(()=> {
-      const code =searchParams.get("code");
-      const type = searchParams.get("type")
+      const pathname = window.location.pathname;
+      const url = new URL(window.location);
+      const code = url.searchParams.get("code");
+      const type = url.searchParams.get("type");
+
   if(code) {
-    if(path.pathname === "/migrate/spotify-auth-callback" ||"/migrate/yt-auth-callback" && type) {
+    if(pathname === "/migrate/spotify-auth-callback" ||"/migrate/yt-auth-callback" && type) {
       const spAt = localStorage.getItem("spotify_tokens")
       const ytAt = localStorage.getItem("yt_tokens")
       if(spAt){
@@ -46,7 +48,7 @@ const UserContextProvider = ({children}) => {
 
     }
   }
-     },[cbPath,searchParams])
+     },[window.location])
 
      const userObj = {
         spotifyAccessToken,
