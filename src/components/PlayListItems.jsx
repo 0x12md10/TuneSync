@@ -17,12 +17,12 @@ const PlayListItems = () => {
   return (
     <div className="playListItems-container">
         {
-           client === "spotify" && spotifyUserData["userPlaylists"].map(item => {
+           (client === "spotify") && !spotifyUserData.loading && spotifyUserData["userPlaylists"]?.map(item => {
                 return <PlayListItem key={item.id} data={item} />
             })
         }
         {
-            client === "youtube" && youtubeUserData["userPlaylists"]["items"].map(
+            (client === "youtube") && !youtubeUserData.loading && youtubeUserData["userPlaylists"]?.["items"].map(
                 (item)=> {
                     return <PlayListItem  key={item.id}  data={item}/>
                 }

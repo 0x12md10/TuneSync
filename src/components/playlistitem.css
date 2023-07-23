@@ -13,7 +13,7 @@
 }
 
 
-.playlist-name-container , .playlist-description-container,.total-tracks-container, .btn-container {
+.playlist-container {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

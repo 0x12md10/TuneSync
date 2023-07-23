@@ -13,7 +13,7 @@ const HomeLayout = () => {
     <div className="homepage">
 
         <div className="homepage-logo-container">
-            <img className="homepage-logo" src={logo} alt="tunesync logo" />
+            {<img className="homepage-logo" src={logo} alt="tunesync logo" />}
             <h1 className="homepage-title">TUNE SYNC</h1>
         </div>
         <div className="description-container">

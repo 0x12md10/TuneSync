@@ -9,7 +9,7 @@ const PlayListItem = ({data }) => {
 
   return (
     <div className='playlist-item-container'>
-      <div className='playlist-name-container'>
+      <div className='playlist-container playlist-name-container'>
        <p className='name-title'>Name</p> 
       {
         client === "spotify" &&
@@ -19,7 +19,7 @@ const PlayListItem = ({data }) => {
         <p className='playlist-name'>{data["title"]}</p>
       }
       </div>
-      <div className='playlist-description-container'>
+      <div className='playlist-container playlist-description-container'>
        <p className='description-title'>Description</p> 
       {client === "spotify" &&
         <p  className='playlist-description'>{data["description"] ? data["description"] : "No Description"}</p>
@@ -28,7 +28,7 @@ const PlayListItem = ({data }) => {
       <p  className='playlist-description'>{data["description"] ? data["description"] : "No Description"}</p>
       }
       </div>
-      <div className='total-tracks-container'>
+      <div className='playlist-container total-tracks-container'>
         <p className='total-tracks-title'>Total Tracks</p>
         {client === "spotify" &&
                 <p className='total-tracks'>{data["tracks"]["total"]}</p>
@@ -38,7 +38,7 @@ const PlayListItem = ({data }) => {
                 <p className='total-tracks'>{data["totaltracks"]["itemCount"]}</p>
         }
       </div>
-      <div className='btn-container'>
+      <div className='playlist-container btn-container'>
       <p className='transfer-text'>Transfer</p>
       <button className='transfer-btn' ><TransferLogo/></button>
       </div>
