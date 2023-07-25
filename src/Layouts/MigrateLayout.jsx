@@ -38,9 +38,9 @@ const MigrateLayout = () => {
 
   }
 
-  const ytToken = async() => {
+  const ytToken = async(code) => {
       if(!getCookie("yt_access_token")){
-        dispatch(fetchyoutubeToken(ytAuthCode));
+        dispatch(fetchyoutubeToken(code));
       } 
     
 
@@ -56,17 +56,17 @@ const MigrateLayout = () => {
     }
     if(path.pathname === "/migrate/yt-auth-callback") {
       setYtAuthCode(code);
-      ytToken();
+      ytToken(code);
     }
   } 
   if(getCookie("sp_access_token")) {
     dispatch(SP_INITIAL_CHECK(getCookie("sp_access_token")));
-    navigate("/migrate")
+ 
   }
 
   if(getCookie("yt_access_token")) {
     dispatch(YT_INITIAL_CHECK(getCookie("yt_access_token")))
-    navigate("/migrate")
+
   }
 
 console.log("inside useffect") 

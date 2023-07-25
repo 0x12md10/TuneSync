@@ -1,5 +1,8 @@
 import {setCookie,getCookie} from "./cookieSetup";
 
+const isDevelopmentMode = import.meta.env.MODE === "development"
+const redirect = isDevelopmentMode ? "http://localhost:5173/migrate/spotify-auth-callback" : "https://tunesync-393306.web.app/migrate/spotify-auth-callback"
+
 // Generate code verifier
 const  generateRandomString = (length) => {
     let text = '';
@@ -32,7 +35,7 @@ async function generateCodeChallenge(codeVerifier) {
 
 export const getToken = async(authCode)=> {
     const clientId = 'a41ccb31150241f7b6c45e55e38d5beb';
-    const redirectUri = 'http://localhost:5173/migrate/spotify-auth-callback';
+    const redirectUri = redirect;
     let code = authCode;
     const codeVerifier = getCookie("sp_code_verifier")
     
@@ -67,7 +70,7 @@ export const authFlow = async() => {
 
 
     const clientId = 'a41ccb31150241f7b6c45e55e38d5beb';
-    const redirectUri = 'http://localhost:5173/migrate/spotify-auth-callback';
+    const redirectUri = redirect;
 
     let codeVerifier = generateRandomString(128);
 

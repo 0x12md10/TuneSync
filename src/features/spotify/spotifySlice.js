@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {   getToken } from "../../../scripts/auth";
-import { getTrackDetails  , migrateToYoutube } from "../../../scripts/migrationScripts";
+import { getTrackDetails  , migrateToYoutube ,createYoutubePlaylist } from "../../../scripts/migrationScripts";
 import { spotifyGetPlayLists , spotifyGetTracks,spotifyGetUser } from "../../../scripts/spotifygetUser";
 import { getCookie , setCookie } from "../../../scripts/cookieSetup";
 
@@ -130,16 +130,16 @@ export const migrate = (playlist)=> async(dispatch) => {
     }
     const spotifyTracks = await spotifyGetTracks(config , id)
     console.log(spotifyTracks)
-    // const response = await YoutubeMigrateFlow(playlist);
-    const ytPlaylist = "PL2E-e34UBSXQiVDn_s9jUr7mLmJWEOSMa"
+    const createdPlaylist = await createYoutubePlaylist(title,description);
+    console.log(createdPlaylist)
     const total = spotifyTracks.tracks.length
-    if(ytPlaylist && total  >=1) {
+    if(createdPlaylist.id && total  >=1) {
         for(let i = 0 ;i<total;i++) {
             const name = spotifyTracks.tracks[i].name;
             const artist  = spotifyTracks.tracks[i]?.artists[0];
             const trackDetails = await getTrackDetails(name,artist);
             console.log("trackdetails" , trackDetails)
-            const response = await migrateToYoutube(trackDetails.id,ytPlaylist,trackDetails.kind,trackDetails.channelId);
+            const response = await migrateToYoutube(trackDetails.id,createdPlaylist.id,trackDetails.kind,trackDetails.channelId);
             console.log("result" ,response)
             const percentageOver = Math.floor(((i+1) / total)*100);
             dispatch(MIGRATING_STATUS(percentageOver))

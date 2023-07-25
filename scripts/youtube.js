@@ -2,7 +2,10 @@ import {setCookie} from "./cookieSetup"
 import axios from "axios";
 const CLIENT_ID = "366826251818-brmjuhbqp4arls50m7rf6p4dph2fpo3r.apps.googleusercontent.com";
 const CLIENT_SECRET = "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";
-const REDIRECT_URL = "http://localhost:5173/migrate/yt-auth-callback";
+
+
+const isDevelopmentMode = import.meta.env.MODE === "development";
+const REDIRECT_URL = isDevelopmentMode ? "http://localhost:5173/migrate/yt-auth-callback" : "https://tunesync-393306.web.app/migrate/yt-auth-callback"
 
 // const oauth2Client = new google.auth.OAuth2(
 //     CLIENT_ID,
