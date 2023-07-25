@@ -30,11 +30,10 @@ async function generateCodeChallenge(codeVerifier) {
 //   auth 
 
 
-export const getToken = async()=> {
+export const getToken = async(authCode)=> {
     const clientId = 'a41ccb31150241f7b6c45e55e38d5beb';
     const redirectUri = 'http://localhost:5173/migrate/spotify-auth-callback';
-    const urlParams = new URLSearchParams(window.location.search);
-    let code = urlParams.get('code');
+    let code = authCode;
     const codeVerifier = getCookie("sp_code_verifier")
     
     console.log("in the auth flow")

@@ -27,28 +27,21 @@ const MigrateLayout = () => {
 
 
   useEffect(()=> {
-    if(getCookie("sp_access_token")) {
-      dispatch(SP_INITIAL_CHECK(getCookie("sp_access_token")));
-      navigate("/migrate")
-  
-    }
-  
-    if(getCookie("yt_access_token")) {
-      dispatch(YT_INITIAL_CHECK(getCookie("yt_access_token")))
-      navigate("/migrate")
-    }
+
     
-    const SpotifyToken = async() => {
+    const SpotifyToken = async(code) => {
       if(!getCookie("sp_access_token")){
-        dispatch(fetchSpotifyToken())
+        console.log("going to fetch");
+        console.log(spotifyAuthCode)
+        dispatch(fetchSpotifyToken(code))
       }
 
   }
 
   const ytToken = async() => {
       if(!getCookie("yt_access_token")){
-        dispatch(fetchyoutubeToken(code));
-      }
+        dispatch(fetchyoutubeToken(ytAuthCode));
+      } 
     
 
   }
@@ -57,7 +50,7 @@ const MigrateLayout = () => {
   if(code) {
     if(path.pathname === "/migrate/spotify-auth-callback") {
       setSpotifyAuthCode(code);
-      SpotifyToken();
+      SpotifyToken(code);
 
       console.log("inspide spotify token get")
     }
@@ -66,7 +59,15 @@ const MigrateLayout = () => {
       ytToken();
     }
   } 
+  if(getCookie("sp_access_token")) {
+    dispatch(SP_INITIAL_CHECK(getCookie("sp_access_token")));
+    navigate("/migrate")
+  }
 
+  if(getCookie("yt_access_token")) {
+    dispatch(YT_INITIAL_CHECK(getCookie("yt_access_token")))
+    navigate("/migrate")
+  }
 
 console.log("inside useffect") 
 

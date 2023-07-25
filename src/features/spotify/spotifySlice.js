@@ -87,10 +87,10 @@ const spotifySlice = createSlice({
             INITIAL_CHECK } = actions;
  export const {reducer} = spotifySlice;
 
-export const fetchSpotifyToken = () => async(dispatch) => {
+export const fetchSpotifyToken = (authCode) => async(dispatch) => {
     dispatch(FETCH_SPOTIFY_TOKENS_REQUESTED())
      
-            const response = await getToken();
+            const response = await getToken(authCode);
             console.log(response);
             dispatch(FETCH_SPOTIFY_TOKENS_SUCCESS(response))
 }
@@ -142,7 +142,6 @@ export const migrate = (playlist)=> async(dispatch) => {
             const response = await migrateToYoutube(trackDetails.id,ytPlaylist,trackDetails.kind,trackDetails.channelId);
             console.log("result" ,response)
             const percentageOver = Math.floor(((i+1) / total)*100);
-            console.log("total : ", total," i " , i," percentageover: ", percentageOver," calc1: " , (i+1/total), " calc2: ", ((i+1)/total)*100)
             dispatch(MIGRATING_STATUS(percentageOver))
         }
     }
