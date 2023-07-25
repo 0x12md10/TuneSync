@@ -1,10 +1,20 @@
 import "./playlistitem.css"
 import TransferLogo  from "./TransferLogo"
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { migrate as youtubeMigrate } from "../features/spotify/spotifySlice"
+import { useDispatch } from "react-redux"
 
 const PlayListItem = ({data }) => {
 
   const {client} = useParams()
+  const dispatch = useDispatch()
+  const navigate = useNavigate();
+
+  const transfer= () => {
+    
+    dispatch(youtubeMigrate(data));
+    navigate(`/${client}/migration`) ;
+  }
 
 
   return (
@@ -40,7 +50,7 @@ const PlayListItem = ({data }) => {
       </div>
       <div className='playlist-container btn-container'>
       <p className='transfer-text'>Transfer</p>
-      <button className='transfer-btn' ><TransferLogo/></button>
+      <button className='transfer-btn' onClick={transfer} ><TransferLogo/></button>
       </div>
 
     </div>

@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {   getToken } from "../../../scripts/auth";
-import { spotifyGetUser } from "../../../scripts/spotifygetUser";
-import { spotifyGetPlayLists } from "../../../scripts/spotifygetUser";
+import { getTrackDetails  , migrateToYoutube } from "../../../scripts/migrationScripts";
+import { spotifyGetPlayLists , spotifyGetTracks,spotifyGetUser } from "../../../scripts/spotifygetUser";
 import { getCookie , setCookie } from "../../../scripts/cookieSetup";
+
 
 const initialState = {
     loading : false,
@@ -12,6 +13,10 @@ const initialState = {
         spotifyAccessTokens : {},
             userDetails : {},
             userPlaylists : []
+    },
+    spMigrate : {
+        isMigrating : false,
+        percentage : 0
     },
     error: ""
 }
@@ -49,11 +54,21 @@ const spotifySlice = createSlice({
         TOGGLE_SPOTIFY_USER_DETAILS_REQUESTED : (state,action)=> {
                 state.spotifyUserData.loading = action.payload
             },
-            SPOTIFY_USER_DETAILS_SUCCESS : (state,action) => {
-                const {userDetails , userPlayLists} = action.payload;
-                state.spotifyUserData.userDetails = userDetails;
-                state.spotifyUserData.userPlaylists = userPlayLists;
-            }
+        SPOTIFY_USER_DETAILS_SUCCESS : (state,action) => {
+            const {userDetails , userPlayLists} = action.payload;
+            state.spotifyUserData.userDetails = userDetails;
+            state.spotifyUserData.userPlaylists = userPlayLists;
+        },
+        MIGRATE_TO_YOUTUBE_REQUESTED : (state) => {
+            state.spMigrate.isMigrating = true;
+        },
+        MIGRATE_YOUTUBE_SUCCESS : (state) => {
+            state.spMigrate.isMigrating = false;
+            state.spMigrate.percentage = 0;
+        },
+        MIGRATING_STATUS : (state,action) => {
+            state.spMigrate.percentage = action.payload;
+        }
         }
 
     }
@@ -66,6 +81,9 @@ const spotifySlice = createSlice({
             FETCH_SPOTIFY_TOKENS_FAILURE ,
             TOGGLE_SPOTIFY_USER_DETAILS_REQUESTED,
             SPOTIFY_USER_DETAILS_SUCCESS,
+            MIGRATE_TO_YOUTUBE_REQUESTED,
+            MIGRATE_YOUTUBE_SUCCESS,
+            MIGRATING_STATUS,
             INITIAL_CHECK } = actions;
  export const {reducer} = spotifySlice;
 
@@ -90,4 +108,45 @@ export const fetchSpotifyUserDetails = () => async(dispatch) => {
         const data = {userDetails , userPlayLists}
         dispatch(SPOTIFY_USER_DETAILS_SUCCESS(data))
         dispatch(TOGGLE_SPOTIFY_USER_DETAILS_REQUESTED(false))
+}
+
+
+
+export const migrate = (playlist)=> async(dispatch) => {
+
+    console.log("selected playlist : " ,playlist)
+    dispatch(MIGRATE_TO_YOUTUBE_REQUESTED())
+
+    const title = playlist.name;
+    const description = playlist.description;
+    const id = playlist.id;
+    console.log(title,description,id);
+
+    const config = {
+        headers : {
+            "Authorization" : `Bearer ${getCookie("sp_access_token")}`
+     
+        }
+    }
+    const spotifyTracks = await spotifyGetTracks(config , id)
+    console.log(spotifyTracks)
+    // const response = await YoutubeMigrateFlow(playlist);
+    const ytPlaylist = "PL2E-e34UBSXQiVDn_s9jUr7mLmJWEOSMa"
+    const total = spotifyTracks.tracks.length
+    if(ytPlaylist && total  >=1) {
+        for(let i = 0 ;i<total;i++) {
+            const name = spotifyTracks.tracks[i].name;
+            const artist  = spotifyTracks.tracks[i]?.artists[0];
+            const trackDetails = await getTrackDetails(name,artist);
+            console.log("trackdetails" , trackDetails)
+            const response = await migrateToYoutube(trackDetails.id,ytPlaylist,trackDetails.kind,trackDetails.channelId);
+            console.log("result" ,response)
+            const percentageOver = Math.floor(((i+1) / total)*100);
+            console.log("total : ", total," i " , i," percentageover: ", percentageOver," calc1: " , (i+1/total), " calc2: ", ((i+1)/total)*100)
+            dispatch(MIGRATING_STATUS(percentageOver))
+        }
+    }
+    dispatch(MIGRATE_YOUTUBE_SUCCESS())
+    
+
 }

@@ -12,7 +12,8 @@ const PlayListItems = () => {
     const {client} = useParams()
     const {spotifyUserData} = useSelector(state =>state.spotify);
     const {youtubeUserData} = useSelector(state =>state.youtube)
-  
+    
+    console.log(spotifyUserData.userPlaylists[7])
 
   return (
     <div className="playListItems-container">

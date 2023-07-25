@@ -42,8 +42,8 @@ export const spotifyGetPlayLists = async (config) => {
 
 }
 
-export const spotifyGetTracks =async (config) => {
-    const response = await axios.get("https://api.spotify.com/v1/playlists/2dGHH5ODqMjz3QKJA8RYeU/tracks",config);
+export const spotifyGetTracks =async (config,playlistId) => {
+    const response = await axios.get(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`,config);
     const data = response.data;
     const tracksObj = {
         "href" : data["href"],
@@ -101,7 +101,7 @@ export const spotifyGetTracks =async (config) => {
 
     }
 
-    console.log(tracksObj["tracks"].length)
+    console.log(tracksObj)
     return tracksObj;
 
 
